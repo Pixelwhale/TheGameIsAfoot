@@ -1,12 +1,12 @@
 ﻿//-----------------------------------------
 // 作成日：2018.06.29
 // 作成者：林 佳叡
-// 内容：攻撃指令
+// 内容：待機、集合の指令
 //-----------------------------------------
 using System.Collections;
 using System.Collections.Generic;
 
-public class AttackOrder : IOrderState
+public class IdleOrder : IOrderState
 {
     public void EndProcess()
     {
@@ -14,12 +14,11 @@ public class AttackOrder : IOrderState
 
     public void Excute(bool orderByPlayer)
     {
-        
     }
 
     public EOrder NextOrder()
     {
-        return EOrder.Attack;
+        return EOrder.Idle;
     }
 
     public void StartProcess(EOrder previousOrder)

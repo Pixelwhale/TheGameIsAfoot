@@ -14,6 +14,7 @@ public enum EOrder
     Charge = 3,         //チャージ
     BackStep = 4,       //後退回避
     JumpEvasion = 5,    //ジャンプ回避
+    Idle = 6,           //待機、集合
 
     Null,               //Enumの最後に置く
 }

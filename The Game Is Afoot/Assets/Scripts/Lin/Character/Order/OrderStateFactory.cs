@@ -10,14 +10,20 @@ namespace CharacterOrder
 {
 	public class OrderStateFactory
 	{
+		/// <summary>
+		/// 指定の指令状態を作成するファクトリーデザインパターン
+		/// </summary>
+		/// <param name="order">オーダータイプ</param>
+		/// <returns></returns>
 		public static IOrderState CreateOrderState(EOrder order)
 		{
 			switch(order)
 			{
 				case EOrder.Attack:
 					return new AttackOrder();
+				default:
+					return new IdleOrder();
 			}
-			return new AttackOrder();
 		}
 	}
 }

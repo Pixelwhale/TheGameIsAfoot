@@ -9,7 +9,7 @@ using System.Collections.Generic;
 public interface IOrderState
 {
     void StartProcess(EOrder previousOrder);
-    void Excute();
+    void Excute(bool orderByPlayer);                //各キャラクターに知らせる
     void EndProcess();
 	EOrder NextOrder();
 }
