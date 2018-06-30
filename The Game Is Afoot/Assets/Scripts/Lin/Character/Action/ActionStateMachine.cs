@@ -6,40 +6,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using CharacterAction;
 
-public class ActionStateMachine
+public class ActionStateMachine : MonoBehaviour
 {
+    [SerializeField]
     private CharacterDataModel charaModel;          //キャラの設定ファイル
-    private Queue<EOrder> inputOrder;               //入力された指令を保存
+    private SkillManager skillManager;              //SkillManager
     private ICharaAction currentState;              //現在状態
-    
-	public ActionStateMachine(CharacterDataModel statusFile)
+
+    void Start()
     {
-        charaModel = statusFile;
-        InitOrderQueue();                           //Queueを初期化
+        skillManager = new SkillManager(charaModel.GetSkills());
+        currentState = ActionStateFactory.CreateActionState(EOrder.Idle);
     }
 
-    /// <summary>
-    /// Queueの長さと中身を初期化
-    /// </summary>
-    private void InitOrderQueue()
+    void Update()
     {
-        int queueSize = 0;                                          //Queueのサイズを宣言
-        for(int i = 0; i < charaModel.SkillCount(); ++i)            //キャラ全部のスキルを一周
-        {
-            int count = charaModel.GetSkill(i).SkillOrderCount();   //スキルの指令数を取得
-            queueSize = Mathf.Max(queueSize, count);                //大きい方を取る
-        }
-
-        inputOrder = new Queue<EOrder>(queueSize);                  //Queueを作成
-    }
-
-    /// <summary>
-    /// 更新処理
-    /// </summary>
-    public void Update()
-    {
-        currentState.Update();
+        currentState.Update();                      //状態更新
     }
 
     /// <summary>
@@ -49,55 +33,23 @@ public class ActionStateMachine
     /// <param name="orderByPlayer">プレイヤーから入力されたか</param>
     public void ExcuteOrder(EOrder order, bool orderByPlayer)
     {
-        if(orderByPlayer)
+        if(!orderByPlayer)
         {
-            UpdateSkillOrder(order);
+            ChangeActionState(ActionStateFactory.CreateActionState(order));
             return;
         }
         
-        //Todo　指定のActionに切り替わる
-    }
-    
-    /// <summary>
-    /// 指令を更新
-    /// </summary>
-    private void UpdateSkillOrder(EOrder order)
-    {
-        inputOrder.Enqueue(order);                                  //Queueに追加
-        for(int i = 0; i < charaModel.SkillCount(); ++i)            //キャラ全部のスキルを一周
-        {
-            bool launch = CheckSkill(charaModel.GetSkill(i).SkillOrder());              //SkillOrderをチェック
-            if(launch)                                              //Trueの場合スキル発動
-            {
-                //Todo Skill i　を発動
-                return;
-            }
-        }
-        //Todo　指定のActionに切り替わる                              //Skill発動しない場合
+        skillManager.AddOrder(order);           //Player入力ならスキルチェック
     }
 
     /// <summary>
-    /// スキル発動するかをチェック
+    /// 状態を切り替え
     /// </summary>
-    /// <param name="skill">スキル指令の配列</param>
-    /// <returns></returns>
-    private bool CheckSkill(EOrder[] skill)
+    /// <param name="newState">新しい状態</param>
+    private void ChangeActionState(ICharaAction newState)
     {
-        int launchCount = skill.Length;                                                 //発動の数
-        int currentCount = 0;                                                           //現在合致している数
-        EOrder[] currentOrder = inputOrder.ToArray();
-        for(int i = 0; i < currentOrder.Length; ++i)                                    //入力された指令を一周
-        {
-            if(currentOrder[i] != skill[currentCount])                                  //一致していない場合は計算リセット
-            {
-                currentCount = 0;
-                continue;
-            }
-
-            currentCount++;                                                             //一致している場合は増やす
-            if(currentCount >= launchCount) return true;                                //発動の数とあっていればTrue
-            if(launchCount - currentCount < currentOrder.Length - i) return false;      //残りが不可能の場合
-        }
-        return false;
+        currentState.EndProcess();              //現在の状態を終了処理
+        currentState = newState;                //新状態を指定
+        newState.StartProcess();                //状態を初期化処理
     }
 }

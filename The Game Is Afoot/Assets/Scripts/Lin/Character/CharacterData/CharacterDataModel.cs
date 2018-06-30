@@ -44,4 +44,13 @@ public class CharacterDataModel : ScriptableObject
 	 {
 		 return skills[skillNo];
 	 }
+
+	/// <summary>
+	/// skillを一括取得
+	/// </summary>
+	/// <returns></returns>
+	 public CharacterSkillModel[] GetSkills()
+	 {
+		 return skills;
+	 }
 }

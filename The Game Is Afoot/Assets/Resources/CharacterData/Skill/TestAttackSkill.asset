@@ -14,5 +14,6 @@ MonoBehaviour:
   skillName: "\u30C6\u30B9\u30C8\u30B9\u30AD\u30EB"
   skillInfo: "\u305F\u3060\u306E\u30C6\u30B9\u30C8\u7528\u30B9\u30AD\u30EB"
   skillOrder: 030000000300000001000000
+  coolDown: 1
   baseDamage: 100
   hitCount: 1
