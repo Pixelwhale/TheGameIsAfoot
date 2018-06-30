@@ -13,13 +13,13 @@ namespace CharacterAction
 		/// <summary>
 		/// 指定の行動状態を作成するファクトリーデザインパターン
 		/// </summary>
-		/// <param name="order">オーダータイプ</param>
+		/// <param name="actionType">アクションタイプ</param>
 		/// <returns></returns>
-		public static ICharaAction CreateActionState(EOrder order)
+		public static ICharaAction CreateActionState(EAction actionType)
 		{
-			switch(order)
+			switch(actionType)
 			{
-				case EOrder.Attack:
+				case EAction.Attack:
 					return new IdleAction();
 				default:
 					return new IdleAction();

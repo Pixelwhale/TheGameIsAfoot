@@ -20,6 +20,7 @@ public class PlayerOrderSystem : MonoBehaviour
 	[SerializeField]
 	private int orderStackCount = 3;				//Orderが溜まれる数
 	private EOrder[] orders;						//実行を待っている指令
+	private int orderCount;							//指令数
 
 	void Start () 
 	{
@@ -28,6 +29,7 @@ public class PlayerOrderSystem : MonoBehaviour
 		orderTimer.Initialize();
 		loadOrder = false;
 		orders = Enumerable.Repeat<EOrder>(EOrder.Null, orderStackCount).ToArray();			//Null指令で初期化
+		orderCount = 0;
 	}	
 	
 	void Update () 
@@ -72,6 +74,7 @@ public class PlayerOrderSystem : MonoBehaviour
 			if(i == orders.Length - 1)				//末尾はNULLにする
 			{
 				orders[i] = EOrder.Null;
+				--orderCount;						//一個指令削除
 				break;
 			}
 			orders[i] = orders[i + 1];				//一個ずらす
@@ -85,5 +88,16 @@ public class PlayerOrderSystem : MonoBehaviour
 	{
 		index = Mathf.Clamp(index, 0, orders.Length);		//Bug対策
 		ShiftOrder(index);							//Index番から後ろを一個前にずらす
+	}
+	
+	/// <summary>
+	/// 指令を追加
+	/// </summary>
+	public void AddOrder(EOrder newOrder)
+	{
+		if(orderCount >= orderStackCount)			//最大数以上なら追加できない
+			return;
+		orders[orderCount] = newOrder;				//末尾指定
+		++orderCount;
 	}
 }

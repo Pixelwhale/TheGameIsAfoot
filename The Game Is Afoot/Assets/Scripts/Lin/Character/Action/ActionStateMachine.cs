@@ -18,7 +18,7 @@ public class ActionStateMachine : MonoBehaviour
     void Start()
     {
         skillManager = new SkillManager(charaModel.GetSkills());
-        currentState = ActionStateFactory.CreateActionState(EOrder.Idle);
+        currentState = ActionStateFactory.CreateActionState(EAction.Idle);
     }
 
     void Update()
@@ -35,11 +35,16 @@ public class ActionStateMachine : MonoBehaviour
     {
         if(!orderByPlayer)
         {
-            ChangeActionState(ActionStateFactory.CreateActionState(order));
+            ChangeActionState(ActionStateFactory.CreateActionState((EAction)order));
             return;
         }
-        
-        skillManager.AddOrder(order);           //Player入力ならスキルチェック
+        bool launch = skillManager.AddOrder(order);                                 //Player入力ならスキル発動チェック
+        if(launch)
+        {
+            ChangeActionState(ActionStateFactory.CreateActionState(EAction.Skill)); //Skill状態（アニメションなど必要な処理）
+            return;
+        }
+        ChangeActionState(ActionStateFactory.CreateActionState((EAction)order));    //発動しなかった場合は指令を実行
     }
 
     /// <summary>

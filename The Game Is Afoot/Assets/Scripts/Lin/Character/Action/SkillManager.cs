@@ -6,6 +6,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using CharacterAction;
 
 public class SkillManager
 {
@@ -34,11 +35,8 @@ public class SkillManager
         inputOrder = new Queue<EOrder>(queueSize);                  //Queueを作成
     }
 
-	/// <summary>
-	/// 指令を追加
-	/// </summary>
-	/// <param name="order"></param>
-	public void AddOrder(EOrder order)
+
+	public bool AddOrder(EOrder order)
 	{
 		inputOrder.Enqueue(order);                                  //Queueに追加
         for(int i = 0; i < skillModels.Length; ++i)            		//キャラ全部のスキルを一周
@@ -47,10 +45,10 @@ public class SkillManager
             if(launch)                                              //Trueの場合スキル発動
             {
                 //Todo Skill i　を発動
-                return;
+                return true;
             }
         }
-        //Todo　指定のActionに切り替わる                              //Skill発動しない場合
+        return false;                                                //Skill発動しない場合
 	}
 
 	//Todo Skillクラスに任せる
