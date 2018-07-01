@@ -8,7 +8,10 @@ using System.Collections.Generic;
 
 public interface ICharaAction
 {
-    void StartProcess();
+    void StartProcess(EAction lastAction);
 	void Update();
     void EndProcess();
+
+    EAction NextAction();
+    bool IsEnd();
 }

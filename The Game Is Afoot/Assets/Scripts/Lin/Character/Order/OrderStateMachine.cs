@@ -13,10 +13,9 @@ public class OrderStateMachine
 	private EOrder currentOrder;			//現在の指令
 	private EOrder nextOrder;				//次の指令
 
-	public OrderStateMachine()
+	public OrderStateMachine(CharacterManager characterManager)
 	{
-		InitOrders();
-
+		InitOrders(characterManager);
 		currentOrder = EOrder.Idle;			//初期状態をIdleにする
 		nextOrder = EOrder.Null;			//Nullに指定
 	}
@@ -24,12 +23,12 @@ public class OrderStateMachine
 	/// <summary>
 	/// 指令を初期化
 	/// </summary>
-	private void InitOrders()
+	private void InitOrders(CharacterManager characterManager)
 	{
 		orderStates = new IOrderState[(int)EOrder.Null];						//配列初期化
 		for(int i = 0; i < (int)EOrder.Null; ++i)								//中身作成
 		{
-			orderStates[i] = OrderStateFactory.CreateOrderState((EOrder)i);		//ファクトリーから取る
+			orderStates[i] = OrderStateFactory.CreateOrderState((EOrder)i, characterManager);		//ファクトリーから取る
 		}
 	}
 
@@ -38,33 +37,19 @@ public class OrderStateMachine
 	/// </summary>
 	private void UpdateOrder()
 	{
-		if(nextOrder == EOrder.Null)		//指令がない場合は現在のステートBaseで決定
-		{
-			ExcuteNextOrder();				//現在ステートの次の指令
-			return;
-		}
-		ExcuteReceivedOrder(true);			//受けた指令を実行
+		ExcuteReceivedOrder();			//受けた指令を実行
 	}
 
 	/// <summary>
 	/// 受けた指令を実行
 	/// </summary>
-	private void ExcuteReceivedOrder(bool orderbyPlayer)
+	private void ExcuteReceivedOrder()
 	{
 		orderStates[(int)currentOrder].EndProcess();					//現在の指令を終了
 		orderStates[(int)nextOrder].StartProcess(currentOrder);			//受けた指令を初期化
-		orderStates[(int)nextOrder].Excute(orderbyPlayer);				//受けた指令を実行
+		orderStates[(int)nextOrder].Excute();							//受けた指令を実行
 		currentOrder = nextOrder;			//現在状態更新
 		nextOrder = EOrder.Null;			//次の指令をNULLにする
-	}
-
-	/// <summary>
-	/// 次の指令がない場合の処理
-	/// </summary>
-	private void ExcuteNextOrder()
-	{
-		nextOrder = orderStates[(int)currentOrder].NextOrder();			//次の指令を設定
-		ExcuteReceivedOrder(false);										//実行
 	}
 
 	/// <summary>

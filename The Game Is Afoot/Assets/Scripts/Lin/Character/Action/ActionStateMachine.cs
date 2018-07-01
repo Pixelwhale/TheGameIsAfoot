@@ -13,48 +13,48 @@ public class ActionStateMachine : MonoBehaviour
     [SerializeField]
     private CharacterDataModel charaModel;          //キャラの設定ファイル
     private SkillManager skillManager;              //SkillManager
-    private ICharaAction currentState;              //現在状態
+    private ICharaAction currentAction;             //現在の行動
+    private EAction currentState;                   //現在の状態
 
     void Start()
     {
         skillManager = new SkillManager(charaModel.GetSkills());
-        currentState = ActionStateFactory.CreateActionState(EAction.Idle);
+        currentAction = ActionStateFactory.CreateActionState(EAction.Idle);
+        currentAction.StartProcess(EAction.Idle);
+        currentState = EAction.Idle;
     }
 
     void Update()
     {
-        currentState.Update();                      //状態更新
+        currentAction.Update();                                                     //状態更新
+        if(currentAction.IsEnd())                                                   //終了の場合
+            ChangeActionState(currentAction.NextAction());                          //次の行動をとる
     }
 
     /// <summary>
     /// 指令を実行
     /// </summary>
     /// <param name="order">指令</param>
-    /// <param name="orderByPlayer">プレイヤーから入力されたか</param>
-    public void ExcuteOrder(EOrder order, bool orderByPlayer)
+    public void ExcuteOrder(EOrder order)
     {
-        if(!orderByPlayer)
-        {
-            ChangeActionState(ActionStateFactory.CreateActionState((EAction)order));
-            return;
-        }
         bool launch = skillManager.AddOrder(order);                                 //Player入力ならスキル発動チェック
         if(launch)
         {
-            ChangeActionState(ActionStateFactory.CreateActionState(EAction.Skill)); //Skill状態（アニメションなど必要な処理）
+            //Todo Skill状態（アニメションなど必要な処理）
             return;
         }
-        ChangeActionState(ActionStateFactory.CreateActionState((EAction)order));    //発動しなかった場合は指令を実行
+        ChangeActionState((EAction)order);                                          //発動しなかった場合は指令を実行
     }
 
     /// <summary>
     /// 状態を切り替え
     /// </summary>
-    /// <param name="newState">新しい状態</param>
-    private void ChangeActionState(ICharaAction newState)
+    private void ChangeActionState(EAction actionType)
     {
-        currentState.EndProcess();              //現在の状態を終了処理
-        currentState = newState;                //新状態を指定
-        newState.StartProcess();                //状態を初期化処理
+        EAction previous = currentState;                                            //現在の状態を記録
+        currentState = actionType;                                                  //新状態を指定
+        currentAction.EndProcess();                                                 //現在の行動を終了処理
+        currentAction = ActionStateFactory.CreateActionState(currentState);         //新行動を指定
+        currentAction.StartProcess(previous);                                       //行動を初期化処理
     }
 }

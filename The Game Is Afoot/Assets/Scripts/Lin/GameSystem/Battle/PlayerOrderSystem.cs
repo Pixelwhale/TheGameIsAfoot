@@ -11,23 +11,24 @@ using UnityEngine;
 
 public class PlayerOrderSystem : MonoBehaviour 
 {
+	[SerializeField]
+	private CharacterManager characterManager;		//キャラクター管理者
 	private OrderStateMachine orderStateMachine;	//指令状態を管理するクラス
 
 	[SerializeField]
 	private float loadOrderSecond = 2.0f;			//何秒ごとに指示を出す
 	private Timer orderTimer;						//時間を計算するタイマー
-	private bool loadOrder;							//指令を読み込むフラグ
 	[SerializeField]
 	private int orderStackCount = 3;				//Orderが溜まれる数
+	[SerializeField]
 	private EOrder[] orders;						//実行を待っている指令
 	private int orderCount;							//指令数
 
 	void Start () 
 	{
-		orderStateMachine = new OrderStateMachine();
+		orderStateMachine = new OrderStateMachine(characterManager);
 		orderTimer = new Timer(loadOrderSecond);
 		orderTimer.Initialize();
-		loadOrder = false;
 		orders = Enumerable.Repeat<EOrder>(EOrder.Null, orderStackCount).ToArray();			//Null指令で初期化
 		orderCount = 0;
 	}	
@@ -43,13 +44,8 @@ public class PlayerOrderSystem : MonoBehaviour
 	/// </summary>
 	private void UpdateTimer()
 	{
-		loadOrder = false;							//指令を読み込むフラグ
-		orderTimer.Update();						//タイマー更新
-		if(orderTimer.IsTime())						//時間に来たら
-		{
-			orderTimer.Initialize();				//タイマー初期化
-			loadOrder = true;						//指令を読み込むフラグをTrue
-		}
+		if(!orderTimer.IsTime())					//時間になっていなければ
+			orderTimer.Update();					//タイマー更新
 	}
 
 	/// <summary>
@@ -57,10 +53,13 @@ public class PlayerOrderSystem : MonoBehaviour
 	/// </summary>
 	private void UpdateOrder()
 	{
-		if(!loadOrder)								//Loadできなければ戻る
+		if(!orderTimer.IsTime())					//時間になっていなければ実行しない
+			return;
+		if(orders[0] == EOrder.Null)				//指令がなければ実行しない
 			return;
 
 		orderStateMachine.ReceiveOrder(orders[0]);	//先端指令を送る
+		orderTimer.Initialize();					//CoolDownTime reset
 		ShiftOrder(0);								//先端から指令をずらす
 	}
 

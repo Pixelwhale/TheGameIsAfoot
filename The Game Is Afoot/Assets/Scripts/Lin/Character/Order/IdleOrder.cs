@@ -8,12 +8,19 @@ using System.Collections.Generic;
 
 public class IdleOrder : IOrderState
 {
+    private CharacterManager characterManager;                  //キャラクター管理者
+    public IdleOrder(CharacterManager characterManager)
+    {
+        this.characterManager = characterManager;
+    }
+
     public void EndProcess()
     {
     }
 
-    public void Excute(bool orderByPlayer)
+    public void Excute()
     {
+        characterManager.PushOrder(EOrder.Idle);
     }
 
     public EOrder NextOrder()

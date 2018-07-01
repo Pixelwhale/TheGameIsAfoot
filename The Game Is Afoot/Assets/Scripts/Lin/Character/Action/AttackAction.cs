@@ -1,13 +1,13 @@
 ﻿//-----------------------------------------
-// 作成日：2018.06.29
+// 作成日：2018.07.01
 // 作成者：林 佳叡
-// 内容：待機、集合の行動
+// 内容：攻撃の行動
 //-----------------------------------------
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class IdleAction : ICharaAction
+public class AttackAction : ICharaAction
 {
     public void EndProcess()
     {
@@ -15,17 +15,17 @@ public class IdleAction : ICharaAction
 
     public bool IsEnd()
     {
-        return false;
+		return false;
     }
 
     public EAction NextAction()
     {
-        return EAction.Idle;
+		return EAction.Attack;
     }
 
     public void StartProcess(EAction lastAction)
     {
-        Debug.Log("集合！");
+		Debug.Log("攻撃だ！");
     }
 
     public void Update()

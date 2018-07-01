@@ -8,8 +8,8 @@ using System.Collections.Generic;
 
 public interface IOrderState
 {
-    void StartProcess(EOrder previousOrder);
-    void Excute(bool orderByPlayer);                //各キャラクターに知らせる
-    void EndProcess();
-	EOrder NextOrder();
+    void StartProcess(EOrder previousOrder);        //回避後状態を戻るやUI表示など
+    void Excute();                                  //各キャラクターに知らせる
+    void EndProcess();                              //主にUI表示
+	EOrder NextOrder();                             //回避など必要に応じて取る
 }

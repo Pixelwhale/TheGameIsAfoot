@@ -8,13 +8,18 @@ using System.Collections.Generic;
 
 public class AttackOrder : IOrderState
 {
+    private CharacterManager characterManager;                  //キャラクター管理者
+    public AttackOrder(CharacterManager characterManager)
+    {
+        this.characterManager = characterManager;
+    }
     public void EndProcess()
     {
     }
 
-    public void Excute(bool orderByPlayer)
+    public void Excute()
     {
-        
+        characterManager.PushOrder(EOrder.Attack);
     }
 
     public EOrder NextOrder()

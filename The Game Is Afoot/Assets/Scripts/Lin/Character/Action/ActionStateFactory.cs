@@ -20,7 +20,7 @@ namespace CharacterAction
 			switch(actionType)
 			{
 				case EAction.Attack:
-					return new IdleAction();
+					return new AttackAction();
 				default:
 					return new IdleAction();
 			}

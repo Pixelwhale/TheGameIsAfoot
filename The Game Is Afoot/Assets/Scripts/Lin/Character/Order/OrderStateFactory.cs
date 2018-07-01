@@ -15,14 +15,14 @@ namespace CharacterOrder
 		/// </summary>
 		/// <param name="order">オーダータイプ</param>
 		/// <returns></returns>
-		public static IOrderState CreateOrderState(EOrder order)
+		public static IOrderState CreateOrderState(EOrder order, CharacterManager characterManager)
 		{
 			switch(order)
 			{
 				case EOrder.Attack:
-					return new AttackOrder();
+					return new AttackOrder(characterManager);
 				default:
-					return new IdleOrder();
+					return new IdleOrder(characterManager);
 			}
 		}
 	}
