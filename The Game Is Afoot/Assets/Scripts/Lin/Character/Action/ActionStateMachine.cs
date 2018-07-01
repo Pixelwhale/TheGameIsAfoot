@@ -11,14 +11,14 @@ using CharacterAction;
 public class ActionStateMachine : MonoBehaviour
 {
     [SerializeField]
-    private CharacterDataModel charaModel;          //キャラの設定ファイル
+    private CharacterSkillModel[] skillModels;      //キャラの設定ファイル
     private SkillManager skillManager;              //SkillManager
     private ICharaAction currentAction;             //現在の行動
     private EAction currentState;                   //現在の状態
 
     void Start()
     {
-        skillManager = new SkillManager(charaModel.GetSkills());
+        skillManager = new SkillManager(skillModels);
         currentAction = ActionStateFactory.CreateActionState(EAction.Idle);
         currentAction.StartProcess(EAction.Idle);
         currentState = EAction.Idle;
@@ -26,7 +26,7 @@ public class ActionStateMachine : MonoBehaviour
 
     void Update()
     {
-        currentAction.Update();                                                     //状態更新
+        currentAction.Update(gameObject);                                           //状態更新
         if(currentAction.IsEnd())                                                   //終了の場合
             ChangeActionState(currentAction.NextAction());                          //次の行動をとる
     }

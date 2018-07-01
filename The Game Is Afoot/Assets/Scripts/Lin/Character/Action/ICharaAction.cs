@@ -5,11 +5,12 @@
 //-----------------------------------------
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
 public interface ICharaAction
 {
     void StartProcess(EAction lastAction);
-	void Update();
+	void Update(GameObject unit);
     void EndProcess();
 
     EAction NextAction();

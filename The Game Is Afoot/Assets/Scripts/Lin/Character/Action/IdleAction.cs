@@ -25,10 +25,9 @@ public class IdleAction : ICharaAction
 
     public void StartProcess(EAction lastAction)
     {
-        Debug.Log("集合！");
     }
 
-    public void Update()
+    public void Update(GameObject unit)
     {
     }
 }

@@ -13,11 +13,11 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - StageCollider
+  - PlayerUnitCollider
+  - PlayerAttackRange
+  - EnemyUnitCollider
+  - EnemyAttackRange
   - 
   - 
   - 

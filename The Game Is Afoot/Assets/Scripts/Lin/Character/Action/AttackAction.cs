@@ -6,29 +6,35 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using AttackState;
 
 public class AttackAction : ICharaAction
 {
-    public void EndProcess()
-    {
-    }
+  private IAttackStep currentStep;    //現在の攻撃状態
 
-    public bool IsEnd()
-    {
+  public void EndProcess()
+  {
+  }
+
+  public bool IsEnd()
+  {
 		return false;
-    }
+  }
 
-    public EAction NextAction()
-    {
+  public EAction NextAction()
+  {
 		return EAction.Attack;
-    }
+  }
 
-    public void StartProcess(EAction lastAction)
-    {
-		Debug.Log("攻撃だ！");
-    }
+  public void StartProcess(EAction lastAction)
+  {
+    currentStep = AttackStepFactory.CreateStep(EAttackStep.Find);   //ターゲットを探す
+  }
 
-    public void Update()
-    {
-    }
+  public void Update(GameObject unit)
+  {
+    currentStep.Update(unit.GetComponent<AttackComponent>());       //更新
+    if(currentStep.IsEnd())                                         //終了の場合
+      currentStep = currentStep.NextStep();                         //次のステップ
+  }
 }
