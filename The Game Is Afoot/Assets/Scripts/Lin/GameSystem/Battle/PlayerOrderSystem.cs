@@ -13,7 +13,6 @@ public class PlayerOrderSystem : MonoBehaviour
 {
 	[SerializeField]
 	private CharacterManager characterManager;		//キャラクター管理者
-	private OrderStateMachine orderStateMachine;	//指令状態を管理するクラス
 
 	[SerializeField]
 	private float loadOrderSecond = 2.0f;			//何秒ごとに指示を出す
@@ -26,7 +25,6 @@ public class PlayerOrderSystem : MonoBehaviour
 
 	void Start () 
 	{
-		orderStateMachine = new OrderStateMachine(characterManager);
 		orderTimer = new Timer(loadOrderSecond);
 		orderTimer.Initialize();
 		orders = Enumerable.Repeat<EOrder>(EOrder.Null, orderStackCount).ToArray();			//Null指令で初期化
@@ -58,7 +56,7 @@ public class PlayerOrderSystem : MonoBehaviour
 		if(orders[0] == EOrder.Null)				//指令がなければ実行しない
 			return;
 
-		orderStateMachine.ReceiveOrder(orders[0]);	//先端指令を送る
+		characterManager.PushOrder(orders[0]);		//先端指令を送る
 		orderTimer.Initialize();					//CoolDownTime reset
 		ShiftOrder(0);								//先端から指令をずらす
 	}

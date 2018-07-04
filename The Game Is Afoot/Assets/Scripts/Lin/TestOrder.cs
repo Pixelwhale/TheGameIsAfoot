@@ -11,5 +11,7 @@ public class TestOrder : MonoBehaviour
 			GetComponent<PlayerOrderSystem>().AddOrder(EOrder.Idle);
 		if(Input.GetKeyDown(KeyCode.W))
 			GetComponent<PlayerOrderSystem>().AddOrder(EOrder.Attack);
+		if(Input.GetKeyDown(KeyCode.E))
+			GetComponent<PlayerOrderSystem>().AddOrder(EOrder.BackStep);
 	}
 }

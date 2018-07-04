@@ -10,7 +10,7 @@ using UnityEngine;
 public class CharacterManager : MonoBehaviour 
 {
 	[SerializeField]
-	private List<GameObject> playerUnits;		//あとで自動作成に変更
+	private List<GameObject> playerUnits;		//Todo:自動作成に変更
 
 	void Start()
 	{
@@ -30,7 +30,7 @@ public class CharacterManager : MonoBehaviour
 	{
 		for(int i = 0; i < playerUnits.Count; ++i)
 		{
-			playerUnits[i].GetComponent<ActionStateMachine>().ExcuteOrder(order);
+			playerUnits[i].GetComponent<ActionStateMachine>().ExecuteOrder(order);
 		}
 	}
 }

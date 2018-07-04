@@ -18,7 +18,7 @@ public class AttackComponent : MonoBehaviour
 	
 	private void Attack()
 	{
-		//ターゲットに対する攻撃やCD計算などをここに
+		//ターゲットに対する攻撃や攻撃CD計算などをここに
 		Debug.Log("攻撃");
 	}
 

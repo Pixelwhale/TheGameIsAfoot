@@ -21,6 +21,8 @@ namespace CharacterAction
 			{
 				case EAction.Attack:
 					return new AttackAction();
+				case EAction.BackStep:
+					return new BackStepAction();
 				default:
 					return new IdleAction();
 			}

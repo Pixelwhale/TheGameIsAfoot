@@ -35,7 +35,7 @@ public class ActionStateMachine : MonoBehaviour
     /// 指令を実行
     /// </summary>
     /// <param name="order">指令</param>
-    public void ExcuteOrder(EOrder order)
+    public void ExecuteOrder(EOrder order)
     {
         bool launch = skillManager.AddOrder(order);                                 //Player入力ならスキル発動チェック
         if(launch)
